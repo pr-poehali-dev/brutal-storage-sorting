@@ -4,27 +4,58 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [formData, setFormData] = useState({
+  const [jobFormData, setJobFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    message: ''
+    telegram: '',
+    message: '',
+    resume: null as File | null
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
+  const [partnerFormData, setPartnerFormData] = useState({
+    companyName: '',
+    contactName: '',
+    email: '',
+    phone: '',
+    message: '',
+    serviceType: ''
+  });
+
+  const handleJobInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setJobFormData({
+      ...jobFormData,
       [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handlePartnerInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setPartnerFormData({
+      ...partnerFormData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleResumeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setJobFormData({
+      ...jobFormData,
+      resume: file
+    });
+  };
+
+  const handleJobSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Форма отправлена:', formData);
-    // Здесь будет логика отправки формы
+    console.log('Заявка на работу отправлена:', jobFormData);
+  };
+
+  const handlePartnerSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Заявка от партнера отправлена:', partnerFormData);
   };
 
   const stats = [
@@ -32,6 +63,52 @@ const Index = () => {
     { number: '500+', label: 'Сотрудников' },
     { number: '12', label: 'Городов присутствия' },
     { number: '5 лет', label: 'На рынке' }
+  ];
+
+  const services = [
+    {
+      icon: 'Package',
+      title: 'ОТВЕТСТВЕННОЕ ХРАНЕНИЕ',
+      description: 'Безопасное хранение товаров с полным контролем температуры и влажности',
+      features: ['Контроль температуры', 'Система видеонаблюдения', 'Страхование грузов']
+    },
+    {
+      icon: 'ArrowUpDown',
+      title: 'СОРТИРОВКА ТОВАРОВ',
+      description: 'Профессиональная сортировка по любым параметрам с высокой скоростью',
+      features: ['Автоматизированная сортировка', 'Маркировка товаров', 'Контроль качества']
+    },
+    {
+      icon: 'Truck',
+      title: 'ЛОГИСТИКА',
+      description: 'Полный цикл логистических услуг от приемки до отправки',
+      features: ['Транспортировка', 'Экспедирование', 'Документооборот']
+    },
+    {
+      icon: 'BarChart3',
+      title: 'УЧЕТ И АНАЛИТИКА',
+      description: 'Полный учет движения товаров и детальная отчетность',
+      features: ['WMS система', 'Онлайн отчеты', 'Интеграция с 1С']
+    },
+    {
+      icon: 'Shield',
+      title: 'БЕЗОПАСНОСТЬ',
+      description: 'Многоуровневая система безопасности складских помещений',
+      features: ['Охрана 24/7', 'Контроль доступа', 'Пожарная сигнализация']
+    },
+    {
+      icon: 'Clock',
+      title: 'БЫСТРАЯ ОБРАБОТКА',
+      description: 'Минимальные сроки обработки и отгрузки товаров',
+      features: ['Приемка до 4 часов', 'Отгрузка в день заявки', 'Экспресс обработка']
+    }
+  ];
+
+  const team = [
+    { name: 'Александр Петров', position: 'Генеральный директор', experience: '15 лет в логистике' },
+    { name: 'Мария Сидорова', position: 'Директор по операциям', experience: '12 лет в сфере складирования' },
+    { name: 'Дмитрий Козлов', position: 'Начальник склада', experience: '8 лет управления складскими процессами' },
+    { name: 'Елена Волкова', position: 'Менеджер по качеству', experience: '6 лет контроля качества услуг' }
   ];
 
   return (
@@ -44,7 +121,7 @@ const Index = () => {
               <div className="bg-red-500 w-12 h-12 flex items-center justify-center">
                 <Icon name="Package" className="text-white" size={24} />
               </div>
-              <h1 className="text-2xl font-bold text-black">LOGISTICS PRO</h1>
+              <h1 className="text-2xl font-bold text-black">ЛОГИСТИКА СЕРВИС</h1>
             </div>
             <nav className="hidden md:flex space-x-8">
               <a href="#partners" className="text-black hover:text-red-500 font-medium uppercase tracking-wide">
@@ -166,53 +243,131 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Services */}
+              {/* Services Grid */}
               <div>
                 <h2 className="text-4xl font-bold mb-8 text-center text-black">НАШИ УСЛУГИ</h2>
-                <div className="grid md:grid-cols-3 gap-8">
-                  <Card className="brutal-card bg-white">
-                    <CardHeader>
-                      <div className="bg-red-500 w-12 h-12 flex items-center justify-center mb-4">
-                        <Icon name="Package" className="text-white" size={24} />
-                      </div>
-                      <CardTitle className="text-xl">ОТВЕТСТВЕННОЕ ХРАНЕНИЕ</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="text-gray-600">
-                        Безопасное хранение товаров с полным контролем температуры и влажности
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="brutal-card bg-white">
-                    <CardHeader>
-                      <div className="bg-red-500 w-12 h-12 flex items-center justify-center mb-4">
-                        <Icon name="ArrowUpDown" className="text-white" size={24} />
-                      </div>
-                      <CardTitle className="text-xl">СОРТИРОВКА ТОВАРОВ</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="text-gray-600">
-                        Профессиональная сортировка по любым параметрам с высокой скоростью
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="brutal-card bg-white">
-                    <CardHeader>
-                      <div className="bg-red-500 w-12 h-12 flex items-center justify-center mb-4">
-                        <Icon name="Truck" className="text-white" size={24} />
-                      </div>
-                      <CardTitle className="text-xl">ЛОГИСТИКА</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="text-gray-600">
-                        Полный цикл логистических услуг от приемки до отправки
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {services.map((service, index) => (
+                    <Card key={index} className="brutal-card bg-white">
+                      <CardHeader>
+                        <div className="bg-red-500 w-12 h-12 flex items-center justify-center mb-4">
+                          <Icon name={service.icon as any} className="text-white" size={24} />
+                        </div>
+                        <CardTitle className="text-xl">{service.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <CardDescription className="text-gray-600 mb-4">
+                          {service.description}
+                        </CardDescription>
+                        <ul className="space-y-2">
+                          {service.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-center space-x-2">
+                              <div className="bg-black w-1 h-1"></div>
+                              <span className="text-sm text-gray-700">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </div>
+
+              {/* Team Section */}
+              <div>
+                <h2 className="text-4xl font-bold mb-8 text-center text-black">НАША КОМАНДА</h2>
+                <div className="grid md:grid-cols-2 gap-12 items-center mb-8">
+                  <div className="brutal-card bg-gray-100 p-0 overflow-hidden">
+                    <img 
+                      src="/img/fab5ec92-f511-4b0a-9c8f-a2375ee16fa3.jpg" 
+                      alt="Team"
+                      className="w-full h-96 object-cover"
+                    />
+                  </div>
+                  <div className="space-y-6">
+                    {team.map((member, index) => (
+                      <div key={index} className="brutal-card bg-white p-6">
+                        <h3 className="text-xl font-bold mb-2">{member.name}</h3>
+                        <p className="text-red-500 font-medium mb-2 uppercase">{member.position}</p>
+                        <p className="text-gray-600 text-sm">{member.experience}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Partner Contact Form */}
+              <Card className="brutal-card bg-white max-w-2xl mx-auto">
+                <CardHeader>
+                  <CardTitle className="text-3xl text-center text-black">СТАТЬ ПАРТНЕРОМ</CardTitle>
+                  <CardDescription className="text-center text-lg">
+                    Заполните форму для начала сотрудничества
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handlePartnerSubmit} className="space-y-6">
+                    <div className="space-y-4">
+                      <Input
+                        name="companyName"
+                        placeholder="НАЗВАНИЕ КОМПАНИИ"
+                        value={partnerFormData.companyName}
+                        onChange={handlePartnerInputChange}
+                        className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500"
+                        required
+                      />
+                      <Input
+                        name="contactName"
+                        placeholder="КОНТАКТНОЕ ЛИЦО"
+                        value={partnerFormData.contactName}
+                        onChange={handlePartnerInputChange}
+                        className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500"
+                        required
+                      />
+                      <Input
+                        name="email"
+                        type="email"
+                        placeholder="EMAIL"
+                        value={partnerFormData.email}
+                        onChange={handlePartnerInputChange}
+                        className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500"
+                        required
+                      />
+                      <Input
+                        name="phone"
+                        type="tel"
+                        placeholder="ТЕЛЕФОН"
+                        value={partnerFormData.phone}
+                        onChange={handlePartnerInputChange}
+                        className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500"
+                        required
+                      />
+                      <Input
+                        name="serviceType"
+                        placeholder="ИНТЕРЕСУЮЩИЕ УСЛУГИ"
+                        value={partnerFormData.serviceType}
+                        onChange={handlePartnerInputChange}
+                        className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500"
+                      />
+                      <Textarea
+                        name="message"
+                        placeholder="ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ"
+                        rows={4}
+                        value={partnerFormData.message}
+                        onChange={handlePartnerInputChange}
+                        className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500 resize-none"
+                        required
+                      />
+                    </div>
+                    <Button 
+                      type="submit" 
+                      size="lg" 
+                      className="w-full brutal-button bg-red-500 text-white border-red-500 text-lg py-4 uppercase font-bold tracking-wide"
+                    >
+                      ОТПРАВИТЬ ЗАЯВКУ
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="careers" className="space-y-12">
@@ -229,7 +384,7 @@ const Index = () => {
                   <h2 className="text-4xl font-bold mb-6 text-black">РАБОТА У НАС</h2>
                   <div className="space-y-4">
                     <p className="text-lg text-gray-600">
-                      Мы - динамично развивающаяся логистическая компания, которая ценит профессионализм и стремление к развитию.
+                      ООО "Логистика Сервис" - динамично развивающаяся логистическая компания, которая ценит профессионализм и стремление к развитию.
                     </p>
                     <div className="space-y-3">
                       <div className="flex items-center space-x-3">
@@ -238,7 +393,7 @@ const Index = () => {
                       </div>
                       <div className="flex items-center space-x-3">
                         <div className="bg-black w-2 h-2"></div>
-                        <span className="text-gray-700">Социальный пакет</span>
+                        <span className="text-gray-700">Полный социальный пакет</span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <div className="bg-black w-2 h-2"></div>
@@ -246,29 +401,33 @@ const Index = () => {
                       </div>
                       <div className="flex items-center space-x-3">
                         <div className="bg-black w-2 h-2"></div>
-                        <span className="text-gray-700">Обучение и развитие</span>
+                        <span className="text-gray-700">Обучение и развитие персонала</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <div className="bg-black w-2 h-2"></div>
+                        <span className="text-gray-700">Современное оборудование</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Contact Form */}
+              {/* Job Contact Form */}
               <Card className="brutal-card bg-white max-w-2xl mx-auto">
                 <CardHeader>
-                  <CardTitle className="text-3xl text-center text-black">ОБРАТНАЯ СВЯЗЬ</CardTitle>
+                  <CardTitle className="text-3xl text-center text-black">ОТКЛИК НА ВАКАНСИЮ</CardTitle>
                   <CardDescription className="text-center text-lg">
                     Оставьте заявку и мы свяжемся с вами в ближайшее время
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleJobSubmit} className="space-y-6">
                     <div className="space-y-4">
                       <Input
                         name="name"
                         placeholder="ИМЯ"
-                        value={formData.name}
-                        onChange={handleInputChange}
+                        value={jobFormData.name}
+                        onChange={handleJobInputChange}
                         className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500"
                         required
                       />
@@ -276,8 +435,8 @@ const Index = () => {
                         name="email"
                         type="email"
                         placeholder="EMAIL"
-                        value={formData.email}
-                        onChange={handleInputChange}
+                        value={jobFormData.email}
+                        onChange={handleJobInputChange}
                         className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500"
                         required
                       />
@@ -285,17 +444,41 @@ const Index = () => {
                         name="phone"
                         type="tel"
                         placeholder="ТЕЛЕФОН"
-                        value={formData.phone}
-                        onChange={handleInputChange}
+                        value={jobFormData.phone}
+                        onChange={handleJobInputChange}
                         className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500"
                         required
                       />
+                      <Input
+                        name="telegram"
+                        placeholder="TELEGRAM (НЕ ОБЯЗАТЕЛЬНО)"
+                        value={jobFormData.telegram}
+                        onChange={handleJobInputChange}
+                        className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500"
+                      />
+                      <div className="space-y-2">
+                        <Label htmlFor="resume" className="text-lg font-bold uppercase tracking-wide">
+                          РЕЗЮМЕ
+                        </Label>
+                        <Input
+                          id="resume"
+                          type="file"
+                          accept=".pdf,.doc,.docx"
+                          onChange={handleResumeUpload}
+                          className="brutal-card border-2 border-black text-lg py-3"
+                        />
+                        {jobFormData.resume && (
+                          <p className="text-sm text-gray-600">
+                            Выбран файл: {jobFormData.resume.name}
+                          </p>
+                        )}
+                      </div>
                       <Textarea
                         name="message"
-                        placeholder="СООБЩЕНИЕ"
+                        placeholder="СОПРОВОДИТЕЛЬНОЕ ПИСЬМО"
                         rows={4}
-                        value={formData.message}
-                        onChange={handleInputChange}
+                        value={jobFormData.message}
+                        onChange={handleJobInputChange}
                         className="brutal-card border-2 border-black text-lg py-3 uppercase placeholder:text-gray-500 resize-none"
                         required
                       />
@@ -324,18 +507,18 @@ const Index = () => {
                 <div className="bg-red-500 w-12 h-12 flex items-center justify-center">
                   <Icon name="Package" className="text-white" size={24} />
                 </div>
-                <h3 className="text-2xl font-bold">LOGISTICS PRO</h3>
+                <h3 className="text-2xl font-bold">ЛОГИСТИКА СЕРВИС</h3>
               </div>
               <p className="text-gray-400">
-                Профессиональные услуги сортировки и ответственного хранения товаров
+                ООО "Логистика Сервис" - профессиональные услуги сортировки и ответственного хранения товаров
               </p>
             </div>
             <div>
               <h4 className="text-lg font-bold mb-4 uppercase">КОНТАКТЫ</h4>
               <div className="space-y-2 text-gray-400">
-                <p>+7 (495) 123-45-67</p>
-                <p>info@logisticspro.ru</p>
-                <p>Москва, ул. Промышленная, 1</p>
+                <p>+7 (473) 123-45-67</p>
+                <p>info@logistics-service.ru</p>
+                <p>г. Воронеж, БЦ Столль</p>
               </div>
             </div>
             <div>
@@ -344,11 +527,12 @@ const Index = () => {
                 <p>Ответственное хранение</p>
                 <p>Сортировка товаров</p>
                 <p>Логистические решения</p>
+                <p>Учет и аналитика</p>
               </div>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 LOGISTICS PRO. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</p>
+            <p>&copy; 2024 ООО "ЛОГИСТИКА СЕРВИС". ВСЕ ПРАВА ЗАЩИЩЕНЫ.</p>
           </div>
         </div>
       </footer>
